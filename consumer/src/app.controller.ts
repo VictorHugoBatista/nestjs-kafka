@@ -35,7 +35,7 @@ export class AppController implements OnModuleInit {
 
   @MessagePattern('topic-test') // Our topic name
   helloTopic(@Payload() message) {
-    console.log('message', message.value);
+    console.log('message', message.value, Math.random());
     this.sleep(20000);
     return {result: message.value.number * 3};
   }

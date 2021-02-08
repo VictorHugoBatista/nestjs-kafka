@@ -22,6 +22,7 @@ export class AppController implements OnModuleInit {
   @Get()
   getHello() {
     this.kafkaClient.send('topic-test', {number: 5}).subscribe();
+    console.log('send to topic-test');
     return this.appService.getHello();
   }
 
