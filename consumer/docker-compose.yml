@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nestjs-consumer:
+    container_name: nestjs-consumer
+    build:
+      context: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3001:3001
+      - 9229:9229
+    command: npm run start:dev
+    networks:
+      - backend
+      - kafka_network
+
+networks:
+  backend:
+  kafka_network:
+    external: true

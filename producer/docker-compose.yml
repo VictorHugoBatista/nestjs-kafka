@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nestjs-producer:
+    container_name: nestjs-producer
+    build:
+      context: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3000:3000
+      # - 9229:9229
+    command: npm run start:dev
+    networks:
+      - backend
+      - kafka_network
+
+networks:
+  backend:
+  kafka_network:
+    external: true
