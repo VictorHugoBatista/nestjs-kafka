@@ -12,7 +12,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         options: {
           client: {
             clientId: 'hero-worker',
-            brokers: ['kafka:29092'],
+            brokers: ['host.docker.internal:9094'],
           },
           consumer: {
             groupId: 'hero-consumer-return'

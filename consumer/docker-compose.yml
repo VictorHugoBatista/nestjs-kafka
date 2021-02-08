@@ -11,11 +11,10 @@ services:
       - 3001:3001
       - 9229:9229
     command: npm run start:dev
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     networks:
       - backend
-      - kafka_network
 
 networks:
   backend:
-  kafka_network:
-    external: true
