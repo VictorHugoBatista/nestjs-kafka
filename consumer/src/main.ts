@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.connectMicroservice({
     transport: Transport.KAFKA,
     options: {
       client: {
@@ -15,10 +16,8 @@ async function bootstrap() {
       }
     }
   });
-  app.listen(() => console.log('Kafka consumer service is listening!'))
-
-  const app2 = await NestFactory.create(AppModule);
-  await app2.listen(3001);
+  await app.startAllMicroservicesAsync();
+  await app.listen(3001, () => console.log('Server is up!'));
 }
 bootstrap();
 
