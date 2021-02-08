@@ -15,22 +15,17 @@ export class AppController implements OnModuleInit {
   async onModuleInit() {
     // Need to subscribe to topic 
     // so that we can get the response from kafka microservice
-    this.kafkaClient.subscribeToResponseOf('topic-test-return');
     this.kaftaProducer = await this.kafkaClient.connect();
   }
 
   @Get()
   getHello(): string {
     this.kaftaProducer.send({
-      topic: 'topic-test-return',
+      topic: 'topic-test.reply',
       messages: [
         {
           key: Math.random().toString(),
           value: JSON.stringify({teste: 'connect1'}),
-        },
-        {
-          key: Math.random().toString(),
-          value: JSON.stringify({teste: 'connect2'}),
         },
       ],
     });
@@ -41,17 +36,16 @@ export class AppController implements OnModuleInit {
   @MessagePattern('topic-test') // Our topic name
   helloTopic(@Payload() message) {
     console.log('message', message.value);
-    setTimeout(() => {
-      this.kaftaProducer.send({
-        topic: 'topic-test-return',
-        messages: [
-          {
-            key: Math.random().toString(),
-            value: JSON.stringify({result: 5 + 5}),
-          },
-        ],
-      });
-    }, 2000);
-    return message.value;
+    this.sleep(20000);
+    return {result: message.value.number * 3};
+  }
+
+  sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
   }
 }

@@ -20,21 +20,12 @@ export class AppController implements OnModuleInit {
   }
 
   @Get()
-  getHello(): string {
-    this.kaftaProducer.send({
-      topic: 'topic-test',
-      messages: [
-        {
-          key: Math.random().toString(),
-          value: JSON.stringify({number: 5}),
-        },
-      ],
-    });
-    console.log('send teste');
+  getHello() {
+    this.kafkaClient.send('topic-test', {number: 5}).subscribe();
     return this.appService.getHello();
   }
 
-  @MessagePattern('topic-test-return') // Our topic name
+  @MessagePattern('topic-test.reply') // Our topic name
   helloTopic(@Payload() message) {
     console.log('return', message.value);
     return message.value;
